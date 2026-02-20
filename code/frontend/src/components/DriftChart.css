@@ -1,0 +1,96 @@
+.drift-chart {
+    padding: 16px 20px;
+}
+
+.drift-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.drift-header h3 {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.drift-current {
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+}
+
+.drift-empty {
+    text-align: center;
+    padding: 30px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.drift-svg {
+    width: 100%;
+    height: auto;
+}
+
+.thresh-line {
+    stroke-dasharray: 4 3;
+    stroke-width: 1;
+}
+
+.thresh-line.safe {
+    stroke: rgba(52, 211, 153, 0.2);
+}
+
+.thresh-line.danger {
+    stroke: rgba(248, 113, 113, 0.2);
+}
+
+.axis-label {
+    font-size: 8px;
+    fill: var(--text-muted);
+    text-anchor: end;
+    font-family: var(--font-mono);
+}
+
+.axis-label-x {
+    font-size: 8px;
+    fill: var(--text-muted);
+    text-anchor: middle;
+    font-family: var(--font-mono);
+}
+
+.drift-legend {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-top: 10px;
+    font-size: 0.68rem;
+    color: var(--text-muted);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot.safe {
+    background: var(--color-safe);
+}
+
+.dot.warn {
+    background: var(--color-warn);
+}
+
+.dot.danger {
+    background: var(--color-danger);
+}

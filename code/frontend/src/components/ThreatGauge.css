@@ -1,0 +1,72 @@
+.threat-gauge {
+    padding: 20px;
+    text-align: center;
+}
+
+.threat-gauge h3 {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.gauge-container {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto;
+}
+
+.gauge-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.gauge-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.04);
+    stroke-width: 8;
+}
+
+.gauge-fill {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.3s ease;
+}
+
+.gauge-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.gauge-score {
+    font-size: 2.4rem;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    line-height: 1;
+}
+
+.gauge-max {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.gauge-action {
+    margin-top: 12px;
+    display: inline-block;
+    padding: 4px 18px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--badge-color);
+    background: color-mix(in srgb, var(--badge-color) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--badge-color) 25%, transparent);
+}

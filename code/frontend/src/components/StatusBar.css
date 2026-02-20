@@ -1,0 +1,84 @@
+.status-bar {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    font-size: 0.78rem;
+    flex-wrap: wrap;
+}
+
+.status-section {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 14px;
+}
+
+.status-divider {
+    width: 1px;
+    height: 18px;
+    background: var(--glass-border);
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    transition: background 0.3s;
+}
+
+.status-indicator.online .status-dot {
+    background: var(--color-safe);
+    box-shadow: 0 0 8px var(--color-safe-glow);
+    animation: pulse-dot 2s infinite;
+}
+
+.status-indicator.offline .status-dot {
+    background: var(--color-danger);
+}
+
+.status-text {
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.status-indicator.online .status-text {
+    color: var(--color-safe);
+}
+
+.status-indicator.offline .status-text {
+    color: var(--color-danger);
+}
+
+.status-label {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.status-value {
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-family: var(--font-mono);
+}
+
+.mode-badge {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.72rem;
+}
+
+.dry-run-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--color-warn);
+    background: rgba(245, 158, 11, 0.1);
+    padding: 2px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    letter-spacing: 0.5px;
+}

@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sentinel
+      POSTGRES_PASSWORD: sentinel
+      POSTGRES_DB: sentinel_ai
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://sentinel:sentinel@db:5432/sentinel_ai
+    depends_on:
+      - db
+
+  frontend:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    volumes:
+      - ../frontend/dist:/usr/share/nginx/html:ro
+
+volumes:
+  pgdata:
