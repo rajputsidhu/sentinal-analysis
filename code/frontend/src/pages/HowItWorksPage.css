@@ -1,0 +1,156 @@
+/* ═══════════════════════════════════════
+   How It Works — Pipeline View
+   ═══════════════════════════════════════ */
+
+.hiw-page {
+    min-height: 100vh;
+    padding-top: 100px;
+    position: relative;
+}
+
+.hiw-bg .hiw-orb-1 {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(120px);
+    background: radial-gradient(circle, rgba(108, 158, 255, 0.08), transparent);
+    top: 20%;
+    left: 30%;
+    pointer-events: none;
+}
+
+.hiw-hero {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 70px;
+    padding: 0 32px;
+}
+
+/* ── Pipeline ── */
+.pipeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 32px 80px;
+}
+
+.pipeline-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom,
+            transparent,
+            rgba(108, 158, 255, 0.2) 10%,
+            rgba(108, 158, 255, 0.2) 90%,
+            transparent);
+    transform: translateX(-50%);
+}
+
+.pipeline-step {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 32px;
+    position: relative;
+    animation: slideUp 0.6s ease forwards;
+    opacity: 0;
+}
+
+.pipeline-step.left {
+    padding-right: calc(50% + 30px);
+}
+
+.pipeline-step.right {
+    padding-left: calc(50% + 30px);
+    flex-direction: row-reverse;
+}
+
+.step-connector {
+    position: absolute;
+    left: 50%;
+    top: 20px;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.step-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6c9eff, #a78bfa);
+    box-shadow: 0 0 12px rgba(108, 158, 255, 0.5);
+    border: 2px solid var(--bg-primary);
+}
+
+.step-card {
+    padding: 24px;
+    position: relative;
+    transition: all 0.3s;
+    width: 100%;
+}
+
+.step-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(108, 158, 255, 0.15);
+}
+
+.step-num {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    opacity: 0.5;
+    margin-bottom: 6px;
+}
+
+.step-icon {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+}
+
+.step-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.step-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.step-detail {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .pipeline-line {
+        left: 24px;
+    }
+
+    .pipeline-step.left,
+    .pipeline-step.right {
+        padding-left: 50px;
+        padding-right: 0;
+        flex-direction: row;
+    }
+
+    .step-connector {
+        left: 24px;
+    }
+}

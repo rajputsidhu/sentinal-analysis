@@ -13,10 +13,21 @@ class Settings(BaseSettings):
     # Server
     port: int = 8000
 
+    # LLM Provider: "openai", "gemini", or "groq"
+    llm_provider: Literal["openai", "gemini", "groq"] = "openai"
+
     # OpenAI
     openai_api_key: str = ""
     openai_model: str = "gpt-4o"
     embedding_model: str = "text-embedding-3-small"
+
+    # Google Gemini
+    gemini_api_key: str = ""
+    gemini_model: str = "gemini-2.0-flash"
+
+    # Groq (free, fast inference)
+    groq_api_key: str = ""
+    groq_model: str = "llama-3.3-70b-versatile"
 
     # Database
     database_url: str = "sqlite+aiosqlite:///./sentinel.db"
@@ -35,7 +46,11 @@ class Settings(BaseSettings):
 
     @property
     def dry_run(self) -> bool:
-        """If no API key, run in dry-run mode."""
+        """If no valid API key for the chosen provider, run in dry-run mode."""
+        if self.llm_provider == "gemini":
+            return not self.gemini_api_key or self.gemini_api_key == "your-gemini-key-here"
+        if self.llm_provider == "groq":
+            return not self.groq_api_key or self.groq_api_key == "your-groq-key-here"
         return not self.openai_api_key or self.openai_api_key == "sk-your-key-here"
 
     @property
@@ -47,3 +62,4 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+

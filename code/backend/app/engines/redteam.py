@@ -5,8 +5,8 @@ Uses the exact red-team prompt from the spec.
 """
 
 import json
-from openai import AsyncOpenAI
 from app.config import settings
+from app.utils.llm_client import chat_completion
 from app.models.schemas import RedTeamOutput
 from app.utils.patterns import PATTERN_CATEGORIES
 from app.utils.logger import log
@@ -41,13 +41,10 @@ async def run_redteam(prompt: str, conversation_history: str = "") -> RedTeamOut
 
 async def _llm_redteam(prompt: str, conversation_history: str) -> RedTeamOutput:
     """Call the LLM with the red-team prompt."""
-    client = AsyncOpenAI(api_key=settings.openai_api_key)
-
     user_content = f"Conversation Context:\n{conversation_history}\n\nUser Prompt:\n{prompt}"
 
     try:
-        response = await client.chat.completions.create(
-            model=settings.openai_model,
+        raw = await chat_completion(
             messages=[
                 {"role": "system", "content": REDTEAM_SYSTEM_PROMPT},
                 {"role": "user", "content": user_content},
@@ -56,7 +53,6 @@ async def _llm_redteam(prompt: str, conversation_history: str) -> RedTeamOutput:
             max_tokens=400,
         )
 
-        raw = response.choices[0].message.content.strip()
         if raw.startswith("```"):
             raw = raw.split("\n", 1)[1].rsplit("```", 1)[0].strip()
 

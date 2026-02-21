@@ -10,5 +10,7 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+    // Handle client-side routing — serve index.html for all routes
+    historyApiFallback: true,
   },
 })

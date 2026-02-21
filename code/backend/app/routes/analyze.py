@@ -6,7 +6,6 @@ Full pipeline: intake → memory → embed → drift → red-team → blue-team 
 import json
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from openai import AsyncOpenAI
 
 from app.config import settings
 from app.database import get_db
@@ -19,6 +18,7 @@ from app.engines.blueteam import run_blueteam
 from app.engines.risk_scorer import compute_risk
 from app.engines.mitigation import rewrite_prompt
 from app.engines.explainability import generate_explanation
+from app.utils.llm_client import chat_completion
 from app.utils.logger import log
 
 
@@ -143,21 +143,17 @@ async def analyze(request: AnalyzeRequest, db: AsyncSession = Depends(get_db)):
 
 async def _call_main_llm(prompt: str, history: list[dict]) -> str:
     """Forward the (possibly rewritten) prompt to the main LLM."""
-    client = AsyncOpenAI(api_key=settings.openai_api_key)
-
     messages = [{"role": "system", "content": "You are a helpful AI assistant."}]
     for msg in history[-10:]:
         messages.append({"role": msg["role"], "content": msg["content"]})
     messages.append({"role": "user", "content": prompt})
 
     try:
-        response = await client.chat.completions.create(
-            model=settings.openai_model,
+        return await chat_completion(
             messages=messages,
             temperature=0.7,
             max_tokens=1000,
         )
-        return response.choices[0].message.content.strip()
     except Exception as e:
         log.error(f"Main LLM call failed", error=str(e))
         return f"[Error] Unable to generate response: {str(e)}"

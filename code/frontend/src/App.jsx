@@ -1,72 +1,60 @@
-import { useState } from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import './App.css';
-import ChatPanel from './components/ChatPanel';
-import ThreatGauge from './components/ThreatGauge';
-import DriftChart from './components/DriftChart';
-import RiskDashboard from './components/RiskDashboard';
-import SessionLog from './components/SessionLog';
-import StatusBar from './components/StatusBar';
+import Navbar from './components/Navbar';
+import HeroPage from './pages/HeroPage';
+import FeaturesPage from './pages/FeaturesPage';
+import HowItWorksPage from './pages/HowItWorksPage';
+import AboutPage from './pages/AboutPage';
+import DashboardPage from './pages/DashboardPage';
 
-export default function App() {
-  const [conversationId, setConversationId] = useState(null);
-  const [latestData, setLatestData] = useState(null);
-  const [analysisHistory, setAnalysisHistory] = useState([]);
-  const [driftHistory, setDriftHistory] = useState([]);
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
 
-  const handleAnalysis = (data) => {
-    setLatestData(data);
-    setAnalysisHistory((prev) => [...prev, data]);
-
-    // Track drift over turns
-    if (data.risk_analysis?.drift) {
-      setDriftHistory((prev) => [
-        ...prev,
-        {
-          score: data.drift_score,
-          turn: data.risk_analysis.drift.turn_number,
-        },
-      ]);
-    }
-  };
+function AppContent() {
+  const location = useLocation();
+  const isDashboard = location.pathname === '/dashboard';
 
   return (
-    <div className="app-layout">
-      {/* ── Header ── */}
-      <header className="app-header glass-card">
-        <div className="app-logo">
-          <div className="shield-icon">🛡️</div>
-          <div>
-            <h1>Sentinel-AI</h1>
-            <div className="subtitle">Security Gateway v2</div>
+    <>
+      <Navbar />
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<HeroPage />} />
+        <Route path="/features" element={<FeaturesPage />} />
+        <Route path="/how-it-works" element={<HowItWorksPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+      </Routes>
+      {!isDashboard && (
+        <footer className="site-footer">
+          <div className="footer-inner">
+            <div className="footer-brand">
+              <span className="footer-logo">🛡️ Sentinel-AI</span>
+              <span className="footer-copy">© 2025 Sentinel-AI. AI Security Gateway.</span>
+            </div>
+            <div className="footer-links">
+              <a href="/features">Features</a>
+              <a href="/how-it-works">Architecture</a>
+              <a href="/about">About</a>
+              <a href="/dashboard">Dashboard</a>
+            </div>
           </div>
-        </div>
-        <div className="header-version">v2.0.0</div>
-      </header>
+        </footer>
+      )}
+    </>
+  );
+}
 
-      {/* ── Main: Chat + Risk Dashboard ── */}
-      <main className="main-area">
-        <ChatPanel
-          onAnalysis={handleAnalysis}
-          conversationId={conversationId}
-          onConversationId={setConversationId}
-        />
-      </main>
-
-      {/* ── Sidebar ── */}
-      <aside className="sidebar">
-        <ThreatGauge
-          score={latestData?.risk_analysis?.final_score || 0}
-          action={latestData?.action_taken || 'allow'}
-        />
-        <DriftChart driftHistory={driftHistory} />
-        <RiskDashboard data={latestData} />
-        <SessionLog analyses={analysisHistory} />
-      </aside>
-
-      {/* ── Footer ── */}
-      <footer className="app-footer">
-        <StatusBar />
-      </footer>
-    </div>
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
   );
 }

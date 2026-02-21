@@ -5,8 +5,8 @@ Uses the exact blue-team prompt from the spec.
 """
 
 import json
-from openai import AsyncOpenAI
 from app.config import settings
+from app.utils.llm_client import chat_completion
 from app.models.schemas import BlueTeamOutput, RedTeamOutput
 from app.utils.patterns import PATTERN_CATEGORIES
 from app.utils.logger import log
@@ -40,14 +40,11 @@ async def run_blueteam(prompt: str, red_team_output: RedTeamOutput) -> BlueTeamO
 
 async def _llm_blueteam(prompt: str, red_team_output: RedTeamOutput) -> BlueTeamOutput:
     """Call the LLM with the blue-team prompt."""
-    client = AsyncOpenAI(api_key=settings.openai_api_key)
-
     red_team_json = json.dumps(red_team_output.model_dump(), indent=2)
     user_content = f"User Prompt:\n{prompt}\n\nRed-Team Analysis:\n{red_team_json}"
 
     try:
-        response = await client.chat.completions.create(
-            model=settings.openai_model,
+        raw = await chat_completion(
             messages=[
                 {"role": "system", "content": BLUETEAM_SYSTEM_PROMPT},
                 {"role": "user", "content": user_content},
@@ -56,7 +53,6 @@ async def _llm_blueteam(prompt: str, red_team_output: RedTeamOutput) -> BlueTeam
             max_tokens=400,
         )
 
-        raw = response.choices[0].message.content.strip()
         if raw.startswith("```"):
             raw = raw.split("\n", 1)[1].rsplit("```", 1)[0].strip()
 

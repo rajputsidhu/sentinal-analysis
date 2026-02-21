@@ -10,8 +10,8 @@ Decision Table:
 """
 
 import re
-from openai import AsyncOpenAI
 from app.config import settings
+from app.utils.llm_client import chat_completion
 from app.utils.logger import log
 
 
@@ -40,11 +40,8 @@ async def rewrite_prompt(prompt: str) -> str:
 
 async def _llm_rewrite(prompt: str) -> str:
     """Use LLM to sanitize the prompt."""
-    client = AsyncOpenAI(api_key=settings.openai_api_key)
-
     try:
-        response = await client.chat.completions.create(
-            model=settings.openai_model,
+        rewritten = await chat_completion(
             messages=[
                 {"role": "system", "content": REWRITE_SYSTEM_PROMPT},
                 {"role": "user", "content": f"Original Prompt:\n{prompt}"},
@@ -52,7 +49,6 @@ async def _llm_rewrite(prompt: str) -> str:
             temperature=0.2,
             max_tokens=400,
         )
-        rewritten = response.choices[0].message.content.strip()
         log.info(f"Prompt rewritten by LLM", original_len=len(prompt), rewritten_len=len(rewritten))
         return rewritten
 
